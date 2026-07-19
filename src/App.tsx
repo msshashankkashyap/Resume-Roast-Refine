@@ -468,11 +468,9 @@ export default function App() {
       <footer className="border-t border-slate-900 bg-slate-950/60 px-4 py-6 text-center text-xs text-slate-500 shrink-0 font-mono">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
           <div>
-            &copy; {new Date().getFullYear()} Resume Roast AI. Roast responsibly.
+            &copy; {new Date().getFullYear()} Resume Roast Refine.
           </div>
-          <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
-            Powered by <span className="font-bold text-slate-500">Gemini 3.5 Flash</span> &bull; 100% Client/Server Security
-          </div>
+         
         </div>
       </footer>
 
