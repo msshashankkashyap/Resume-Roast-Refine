@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-app.use(express.json({ limit: "5mb" }));
+app.use(express.json({ limit: "4mb" })); // Vercel caps request bodies at 4.5mb, keep under it
 
 // Lazy initializer for Gemini client
 let aiClient: GoogleGenAI | null = null;
@@ -359,29 +359,38 @@ app.post("/api/parse-resume", async (req, res) => {
   }
 });
 
-// Serve frontend assets
-async function setupServer() {
-  if (process.env.NODE_ENV !== "production") {
-    const { createServer: createViteServer } = await import("vite");
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
-  }
+// ---------------------------------------------------------------------------
+// Local dev vs. Vercel behavior
+// ---------------------------------------------------------------------------
+// On Vercel (process.env.VERCEL is set automatically), we ONLY export the
+// Express app as a serverless function handler — no app.listen(), and no
+// static file serving (Vercel serves your built frontend separately, based
+// on vercel.json). Locally, we spin up Vite in middleware mode for dev, or
+// serve the built /dist folder in production-like local runs, and actually
+// bind to a port.
+// ---------------------------------------------------------------------------
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://0.0.0.0:${PORT}`);
-  });
+if (!process.env.VERCEL) {
+  (async () => {
+    if (process.env.NODE_ENV !== "production") {
+      const { createServer: createViteServer } = await import("vite");
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      });
+      app.use(vite.middlewares);
+    } else {
+      const distPath = path.join(process.cwd(), "dist");
+      app.use(express.static(distPath));
+      app.get("*", (req, res) => {
+        res.sendFile(path.join(distPath, "index.html"));
+      });
+    }
+
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://0.0.0.0:${PORT}`);
+    });
+  })();
 }
 
-export { app };
-
-setupServer();
-
+export default app;
