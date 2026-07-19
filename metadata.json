@@ -1,0 +1,6 @@
+{
+  "name": "Resume Roast AI",
+  "description": "A razor-witted, meme-literate resume critic performing as an entertainment/coaching hybrid. Calibrate your roast level and receive sharp, actionable line-by-line roast reviews of your resume.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
