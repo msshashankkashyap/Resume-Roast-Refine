@@ -467,10 +467,9 @@ export default function App() {
       {/* Styled Human Footer */}
       <footer className="border-t border-slate-900 bg-slate-950/60 px-4 py-6 text-center text-xs text-slate-500 shrink-0 font-mono">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
-          <div>
-            &copy; {new Date().getFullYear()} Resume Roast Refine.
-          </div>
-         
+          <div className="text-center">
+  &copy; Resume Roast Refine.
+</div>
         </div>
       </footer>
 
